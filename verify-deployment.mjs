@@ -7,7 +7,7 @@ import {resolve, sep} from 'node:path';
 const root=fileURLToPath(new URL('./dist/',import.meta.url));
 const html=await readFile(resolve(root,'index.html'),'utf8');
 const assets=[...html.matchAll(/(?:src|href)="([^"]+)"/g)].map(x=>x[1]).filter(x=>!x.startsWith('#')&&!/^(data:|https?:)/.test(x));
-assert.deepEqual(assets.sort(),['app.js','connections.js','styles.css','wizard.js']);
+assert.deepEqual(assets.sort(),['app.js','connections.js','site-config.js','styles.css','wizard.js']);
 for(const asset of assets){
   assert.ok(!asset.startsWith('/'),'Assets must be relative to support GitHub repository paths');
   assert.ok((await stat(resolve(root,asset))).isFile());

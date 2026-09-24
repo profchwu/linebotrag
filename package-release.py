@@ -4,7 +4,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 root = Path(__file__).resolve().parent
 release = root / 'release'
 release.mkdir(exist_ok=True)
-files = [root / p for p in ['README.md', 'SECURITY.md', 'DEPLOYMENT.md', 'TEST-REPORT.md', '.gitignore', 'netlify.toml', 'package.json', 'verify.mjs', 'verify-deployment.mjs', 'package-release.py', '啟動工作台.cmd']]
+files = [root / p for p in ['README.md', 'SECURITY.md', 'DEPLOYMENT.md', 'TEST-REPORT.md', '.gitignore', 'netlify.toml', 'wrangler.jsonc', 'package.json', 'verify.mjs', 'verify-deployment.mjs', 'package-release.py', '啟動工作台.cmd']]
 files += [p for folder in ['dist', '.github', 'server', 'netlify', 'tests'] for p in (root / folder).rglob('*') if p.is_file()]
 with ZipFile(release / 'relay-github-netlify-source.zip', 'w', ZIP_DEFLATED) as archive:
     for path in files:

@@ -22,12 +22,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Configure public cloud connections
+        run: node server/build-config.mjs
+        env:
+          PUBLIC_API_ORIGIN: ${{ vars.PUBLIC_API_ORIGIN }}
+          PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.PUBLIC_GOOGLE_CLIENT_ID }}
       - name: Verify functionality
         run: node verify.mjs
       - name: Verify static deployment and repository subpath
         run: node verify-deployment.mjs
       - name: Verify API adapters and Google Sheets synchronization
-        run: node --test tests/api.test.mjs
+        run: node --test tests/api.test.mjs tests/cloudflare.test.mjs
       - name: Verify workbook and generated GAS compatibility
         run: node tests/template-compatibility.mjs
       - name: Upload static site

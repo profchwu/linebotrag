@@ -1,6 +1,6 @@
 # Repository root must be the linebot-studio project directory.
 [build]
-  command = "npm test"
+  command = "npm run build && npm test"
   publish = "dist"
 
 [build.environment]

@@ -33,6 +33,7 @@ Windows 亦可雙擊 `啟動工作台.cmd`，開啟 http://127.0.0.1:4317 。一
 
 完整專案包以本資料夾作為儲存庫根目錄；不要上傳外層其他專案。
 
+- Cloudflare Workers：網站與 API 一起部署，使用者不需安裝 Node.js。設定見 wrangler.jsonc。
 - Netlify 完整 Git 部署：前端與 Functions 一起部署，支持真實 API。
 - GitHub Pages：只發布前端；API 功能需外接自己部署的 Netlify 後端。
 - 靜態拖曳包：只有介面與本機功能，沒有 Functions。

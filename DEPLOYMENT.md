@@ -85,3 +85,21 @@ LINE Webhook 簽章入口、事件去重與使用者資料權限、PDF OCR、語
 - OpenAI：https://developers.openai.com/api/docs/guides/text
 - Gemini：https://ai.google.dev/api/models
 - xAI：https://docs.x.ai/developers/rest-api-reference/inference/chat-completions
+
+## 全網頁模式（管理者設定一次）
+
+使用者不需安裝 Node.js。管理者將此儲存庫匯入 Netlify，建置會自動部署網站與 Functions。Netlify 網站使用同源 API，無需每位使用者輸入後端網址。
+
+若保留 GitHub Pages 入口，在 GitHub Actions 的 Repository variables 設定 PUBLIC_API_ORIGIN 為你的 Netlify HTTPS 網站來源；Netlify 的 ALLOWED_ORIGINS 設為 https://profchwu.github.io。重新執行 GitHub 部署後，所有使用者自動使用該後端。
+
+PUBLIC_GOOGLE_CLIENT_ID 是可公開的 Google Web OAuth 用戶端 ID。可設定於 Netlify 建置環境或 GitHub Repository variables，建置會放入公開 site-config.js。管理者仍需啟用 Sheets API、設定 OAuth 同意畫面、允許實際網站來源與完成所需審查。不可把 Client Secret、API Key 或 Google Token 放入這些 PUBLIC 變數。
+
+網站配置好後，一般使用者只需開啟網址、輸入自己的模型 Key、授權 Google 帳號。不代表完整 LINE／OCR／向量 RAG 已完成。
+
+## Cloudflare Workers 全網頁部署
+
+將 GitHub 的 profchwu/linebotrag 匯入 Workers，名稱 linebotrag，根目錄為儲存庫根。建置命令 `npm run build && npm test`，部署命令 `npx wrangler deploy`。wrangler.jsonc 包含 nodejs_compat、dist 靜態資源與 ASSETS binding。API 不會回退到靜態 HTML。
+
+使用 Workers 網址時前後端同源，不必設定 PUBLIC_API_ORIGIN。ALLOWED_ORIGINS 已允許既有 GitHub Pages 來源。若要 GitHub 網站自動連入此 Worker，再將實際 Worker 網址設為 GitHub Repository variable PUBLIC_API_ORIGIN 並重新部署 Pages。
+
+`/api/health` 僅回傳服務狀態，不驗證模型或 Google 權限。PUBLIC_GOOGLE_CLIENT_ID 為建置時公開配置，仍需 Google Cloud 管理者設定同意畫面及允許的網站來源。Cloudflare 部署不會自動建立 Google OAuth 專案。
