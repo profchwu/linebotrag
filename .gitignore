@@ -1,0 +1,9 @@
+.sites-runtime/
+*.zip
+node_modules/
+.openai/
+.netlify/
+.env
+.env.*
+!.env.example
+release/

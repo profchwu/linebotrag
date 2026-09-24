@@ -1,0 +1,13 @@
+# Repository root must be the linebot-studio project directory.
+[build]
+  command = "npm test"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Hash-based navigation requires no SPA rewrite or framework plugin.
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
