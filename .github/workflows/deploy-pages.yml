@@ -1,4 +1,4 @@
-name: Deploy Relay Studio to GitHub Pages
+name: Deploy LineBot + RAG to GitHub Pages
 
 on:
   push:
@@ -28,6 +28,8 @@ jobs:
         run: node verify-deployment.mjs
       - name: Verify API adapters and Google Sheets synchronization
         run: node --test tests/api.test.mjs
+      - name: Verify workbook and generated GAS compatibility
+        run: node tests/template-compatibility.mjs
       - name: Upload static site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4

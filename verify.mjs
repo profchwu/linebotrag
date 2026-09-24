@@ -91,3 +91,21 @@ ruleRows[3][1]='FALSE';
 assert.equal(vm.runInContext('handleTextMessage_("營業時間")',rulesGas),'沒有符合規則');
 console.log('PASS: Google Sheet rule additions, edits and disabling are read on each message without regenerating GAS.');
 console.log('PASS: CSV quoting, header validation, Google URL validation, OCR exclusion, missing-answer retrieval, triggers, GAS syntax, reordered columns, missing columns, settings lookup.');
+
+// Security regression checks for user-controlled keyword and spreadsheet exports.
+run('state.rules=[{id:"safe-id",enabled:true,keyword:\'<img src=x onerror="alert(1)">\',match:"exact",type:"text",text:"safe",url:""}];page="test";render()');
+assert.ok(!elements.get('#main').innerHTML.includes('<img src=x'));
+assert.ok(elements.get('#main').innerHTML.includes('&lt;img'));
+for(const value of ['=1+1','+SUM(A1:A2)','-1+1','@SUM(A1)','\t=1','  =1','＝1'])assert.ok(run(`csvCell(${JSON.stringify(value)})`).startsWith('"\''));
+assert.equal(run('csvCell("一般文字")'),'"一般文字"');
+sandbox.location.href='http://127.0.0.1:4317/#settings';
+sandbox.AbortSignal=AbortSignal;
+sandbox.fetch=async()=>({ok:true,json:async()=>({models:['test-model']})});
+run('page="settings";runtime.keys[selectedProvider]="dummy-key"');
+await run('runModel("list")');
+assert.ok(elements.get('#main').innerHTML.includes('取得 1 個模型名稱'));
+assert.equal(run('runtime.busy'),false);
+sandbox.location.hostname='profchwu.github.io';
+await assert.rejects(run('callApi({service:"models"})'),/尚未設定 API 後端/);
+console.log('PASS: keyword HTML encoding, CSV formula neutralization, step 2 API completion, GitHub backend guard.');
+

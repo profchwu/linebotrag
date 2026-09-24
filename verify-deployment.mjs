@@ -28,7 +28,7 @@ try{
   for(const prefix of ['/','/relay-studio/']){
     const base=origin+prefix;
     assert.equal((await fetch(base)).status,200);
-    for(const asset of [...assets,'templates/linebot-template.xlsx'])assert.equal((await fetch(new URL(asset,base))).status,200);
+    for(const asset of [...assets,'templates/linebot-template.xlsx','docs/system-architecture.svg'])assert.equal((await fetch(new URL(asset,base))).status,200);
     for(const route of ['knowledge','sheets','models','gas','test','settings']){
       const url=new URL('#'+route,base);
       assert.equal(url.pathname,prefix);
