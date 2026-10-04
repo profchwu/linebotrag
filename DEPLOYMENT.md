@@ -19,7 +19,7 @@
 
 1. 將完整專案推送至自己的 GitHub 儲存庫。
 2. Netlify 新增專案、匯入儲存庫、選 main 分支，Base directory 留空。
-3. netlify.toml 指定 Build command `npm test`、Publish directory `dist`、Functions directory `netlify/functions`、Node 22。
+3. netlify.toml 指定 Build command `npm run build && npm test`、Publish directory `dist`、Functions directory `netlify/functions`、Node 22。
 4. 網站的進階 AI 頁「後端來源」留空，使用同一網站的 `/.netlify/functions/relay-api`。
 5. 輸入自己的 API Key，取得清單後選模型測試。
 
@@ -100,6 +100,6 @@ PUBLIC_GOOGLE_CLIENT_ID 是可公開的 Google Web OAuth 用戶端 ID。可設�
 
 將 GitHub 的 profchwu/linebotrag 匯入 Workers，名稱 linebotrag，根目錄為儲存庫根。建置命令 `npm run build && npm test`，部署命令 `npx wrangler deploy`。wrangler.jsonc 包含 nodejs_compat、dist 靜態資源與 ASSETS binding。API 不會回退到靜態 HTML。
 
-使用 Workers 網址時前後端同源，不必設定 PUBLIC_API_ORIGIN。ALLOWED_ORIGINS 已允許既有 GitHub Pages 來源。若要 GitHub 網站自動連入此 Worker，再將實際 Worker 網址設為 GitHub Repository variable PUBLIC_API_ORIGIN 並重新部署 Pages。
+使用 Workers 網址時前後端同源，不必設定 PUBLIC_API_ORIGIN。ALLOWED_ORIGINS 已允許既有 GitHub Pages 來源與自訂網域 https://linebotrag.nthuai.com。若要 GitHub 網站自動連入此 Worker，再將實際 Worker 網址設為 GitHub Repository variable PUBLIC_API_ORIGIN 並重新部署 Pages。
 
 `/api/health` 僅回傳服務狀態，不驗證模型或 Google 權限。PUBLIC_GOOGLE_CLIENT_ID 為建置時公開配置，仍需 Google Cloud 管理者設定同意畫面及允許的網站來源。Cloudflare 部署不會自動建立 Google OAuth 專案。

@@ -11,7 +11,7 @@
     "run_worker_first": ["/api/*", "/.netlify/functions/*"]
   },
   "vars": {
-    "ALLOWED_ORIGINS": "https://profchwu.github.io"
+    "ALLOWED_ORIGINS": "https://profchwu.github.io,https://linebotrag.nthuai.com"
   },
   "observability": {"enabled": false}
 }

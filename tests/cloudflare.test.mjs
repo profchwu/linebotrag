@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import worker from '../server/cloudflare-worker.mjs';
+import {readFile} from 'node:fs/promises';
+
+test('deployment permits both published frontends and rejects unrelated origins',async()=>{
+  const config=JSON.parse(await readFile(new URL('../wrangler.jsonc',import.meta.url),'utf8'));
+  for(const origin of ['https://profchwu.github.io','https://linebotrag.nthuai.com','https://unrelated.example']){
+    const request=new Request('https://linebot.example/api/relay',{method:'OPTIONS',headers:{Origin:origin,'Access-Control-Request-Method':'POST'}});
+    const response=await worker.fetch(request,config.vars);
+    const permitted=origin!=='https://unrelated.example';
+    assert.equal(response.status,permitted?204:403);
+    assert.equal(response.headers.get('access-control-allow-origin'),permitted?origin:null);
+  }
+});
 
 test('Workers serves assets and public health separately from credentials',async()=>{
   const env={ASSETS:{fetch:async()=>new Response('static asset')}};
