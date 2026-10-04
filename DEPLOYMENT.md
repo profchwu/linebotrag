@@ -115,3 +115,9 @@ PUBLIC_GOOGLE_CLIENT_ID 是可公開的 Google Web OAuth 用戶端 ID。可設�
 使用 Workers 網址時前後端同源，不必設定 PUBLIC_API_ORIGIN。ALLOWED_ORIGINS 已允許既有 GitHub Pages 來源與自訂網域 https://linebotrag.nthuai.com。若要 GitHub 網站自動連入此 Worker，再將實際 Worker 網址設為 GitHub Repository variable PUBLIC_API_ORIGIN 並重新部署 Pages。
 
 `/api/health` 僅回傳服務狀態，不驗證模型或 Google 權限。PUBLIC_GOOGLE_CLIENT_ID 為建置時公開配置，仍需 Google Cloud 管理者設定同意畫面及允許的網站來源。Cloudflare 部署不會自動建立 Google OAuth 專案。
+
+### Cloudflare 共用 OAuth 設定（2026-10-04）
+
+Google 專案使用既有 `Linebot0907`，Google Sheets API 已啟用。Web 用戶端名稱為 `linebotrag`，唯一 JavaScript 來源為 `https://linebotrag.pages.dev`。公開 Client ID：`144343689293-ud9pc9qf1nng3gtidr5ddrvqp06u0svt.apps.googleusercontent.com`。重新建置 Cloudflare 時將此值設定為 `PUBLIC_GOOGLE_CLIENT_ID`，再執行 `node server/build-config.mjs` 與 `node server/build-pages.mjs`。不使用 Client Secret。
+
+OAuth 目前為外部測試模式，僅列入測試名單的帳號可授權。一般使用者開放前仍需完成品牌、正式發布及 Google 要求的驗證。本次確認線上已顯示授權按鈕，但內建瀏覽器操作工具未提供彈出授權視窗，因此尚未驗證真實試算表讀取或寫入。
