@@ -2,6 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {handleApi,modelOperation,sheetOperation,normalizeRules,rulesToRows} from '../server/api.mjs';
 const response=(data,status=200)=>new Response(JSON.stringify(data),{status});
+
+test('upstream redirects are rejected without forwarding credentials', async()=>{
+  let calls=0;
+  await assert.rejects(modelOperation({provider:'OpenAI',action:'list',apiKey:'dummy-key'},async(url,options)=>{
+    calls++;
+    assert.equal(options.redirect,'manual');
+    return new Response('',{status:302,headers:{Location:'https://untrusted.example/'}});
+  }),error=>error.status===502);
+  assert.equal(calls,1);
+});
 test('three providers actually request their fixed generation endpoints',async()=>{
   for(const provider of ['OpenAI','Gemini','Grok']){let called=false;const result=await modelOperation({provider,action:'test',apiKey:'not-a-real-key',model:'test-model'},async(url,opts)=>{called=true;assert.equal(opts.method,'POST');const body=JSON.parse(opts.body);assert.ok(!JSON.stringify(body).includes('not-a-real-key'));if(provider==='OpenAI'){assert.equal(url,'https://api.openai.com/v1/responses');assert.equal(body.store,false);return response({output:[{content:[{type:'output_text',text:'OK'}]}],usage:{total_tokens:4}})}if(provider==='Gemini'){assert.ok(url.startsWith('https://generativelanguage.googleapis.com/'));assert.equal(opts.headers['x-goog-api-key'],'not-a-real-key');return response({candidates:[{content:{parts:[{text:'OK'}]}}]})}assert.equal(url,'https://api.x.ai/v1/chat/completions');return response({choices:[{message:{content:'OK'}}]})});assert.ok(called);assert.equal(result.status,'tested');assert.equal(result.text,'OK')}
 });

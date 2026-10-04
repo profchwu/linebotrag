@@ -1,5 +1,17 @@
 # 部署與連線設定
 
+## 已發布網站（2026-10-04）
+
+- Cloudflare Pages：https://linebotrag.pages.dev/ ，包含網站與 API 後端。
+- 健康檢查：https://linebotrag.pages.dev/api/health 。
+- Netlify 專案 `linebotrag-profchwu` 已建立，但帳號額度耗盡，正式部署被平台拒絕，尚未上線。
+
+Cloudflare 使用 Pages Direct Upload 的 `_worker.js` 進階模式。執行 `node server/build-pages.mjs`，將 `release/cloudflare-pages` 內所有內容壓成 ZIP，再到 Cloudflare 專案建立 Production 部署。ZIP 根目錄須直接包含 `index.html`、`_worker.js` 及 `_routes.json`。
+
+後端採用 Web Crypto 計算試算表版本，並使用 `redirect: manual` 拒絕上游轉址，兼容 Workers 且不轉送憑證至其他主機。Cloudflare 同源 API 不需額外設定；跨網站使用須設定 `ALLOWED_ORIGINS` 並重新發布。
+
+已驗證首頁、範本下載、健康檢查及三家模型供應商無效金鑰的錯誤回傳。有效 API Key 生成及真實 Google Sheet 授權同步仍需使用者憑證，未宣稱完成這些端到端測試。自動 Drive OCR／向量 RAG 仍未實作。
+
 ## 選擇方式
 
 | 方式 | 規則編輯與本機測試 | 真實 API／Google 同步 |
