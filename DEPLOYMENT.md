@@ -4,7 +4,7 @@
 
 - Cloudflare Pages：https://linebotrag.pages.dev/ ，包含網站與 API 後端。
 - 健康檢查：https://linebotrag.pages.dev/api/health 。
-- Netlify 專案 `linebotrag-profchwu` 已建立，但帳號額度耗盡，正式部署被平台拒絕，尚未上線。
+- Netlify 使用既有專案 `linebotrag`（https://linebotrag.netlify.app/），但帳號額度耗盡，正式部署被平台拒絕，尚未上線。多餘的 `linebotrag-profchwu` 空專案已依使用者要求刪除。
 
 Cloudflare 使用 Pages Direct Upload 的 `_worker.js` 進階模式。執行 `node server/build-pages.mjs`，將 `release/cloudflare-pages` 內所有內容壓成 ZIP，再到 Cloudflare 專案建立 Production 部署。ZIP 根目錄須直接包含 `index.html`、`_worker.js` 及 `_routes.json`。
 
