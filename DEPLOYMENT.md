@@ -54,12 +54,12 @@ API 需另將相同完整專案部署到 Netlify，然後：
 1. 建立 Google Cloud 專案，啟用 Google Sheets API。
 2. 設定 OAuth 同意畫面；測試模式加入實際使用者帳號。
 3. 建立「網頁應用程式」OAuth 用戶端。將前端實際來源加入「已授權的 JavaScript 來源」，例如 `http://127.0.0.1:4317`、`https://your-site.netlify.app`、`https://your-account.github.io`。不包含路徑；localhost 是另一個需自行加入的來源。
-4. 複製以 `.apps.googleusercontent.com` 結尾的公開 Client ID。不需要 Client Secret，請勿輸入密鑰。
+4. 將以 `.apps.googleusercontent.com` 結尾的公開 Client ID 設為建置環境的 `PUBLIC_GOOGLE_CLIENT_ID`，執行 `node server/build-config.mjs` 後重新部署。不需要 Client Secret。這是管理者的一次性設定，不要求一般使用者填寫。
 5. 對外公開使用時，依 Google 政策完成所需審查與發布。
 
 ## 使用者同步規則
 
-1. 步驟 1「連接 Google Sheet」或步驟 2「授權／重新讀取」，貼上試算表網址與 Client ID。
+1. 步驟 1「連接 Google Sheet」或步驟 2「授權／重新讀取」，只貼上試算表網址，按「Google 授權並連接」。網站未設定共用 Client ID 時會明確顯示尚未就緒，不提供無法運作的授權按鈕。
 2. Google 授權選擇有編輯權的帳號。此流程請求 spreadsheets 讀寫範圍，不是每檔案限定授權；介面明示，程式只操作指定試算表。
 3. 原表已有規則時，選擇載入 Google 規則或保留本機規則。授權本身不寫入。
 4. 編輯後按「寫入 Google Sheet」，確認目的試算表與筆數，看到「已寫入並讀回驗證」才算成功。
